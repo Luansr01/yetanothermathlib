@@ -297,6 +297,7 @@ public:
         );
     }
 
+
     Mat2 Subtract(Mat2 mat){
         return Mat2(
         x.x - mat.x.x, x.y - mat.x.y,
@@ -309,6 +310,7 @@ public:
             y.x - scalar, y.y - scalar
         );
     }
+
 
     Mat2 Multiply(Mat2 mat){
         return Mat2(
@@ -351,6 +353,13 @@ public:
         inverseMat = inverseMat.Multiply(scalar);
         return Multiply(inverseMat);
     }
+    Mat2 Divide(float scalar){
+        return Mat2(
+            x.x / scalar, x.y / scalar,
+            y.x / scalar, y.y / scalar
+        );
+    }
+
 
     bool Equals(Mat2 mat){
         return (
@@ -358,6 +367,7 @@ public:
             (y.x == mat.y.x) && (y.y == mat.y.y)
         );
     }
+
 
     template<typename type>
     Mat2 operator+(type v){
@@ -403,3 +413,149 @@ public:
     }
 };
 
+class Mat3{
+public:
+    Vec3 x;
+    Vec3 y;
+    Vec3 z;
+
+    Mat3(){
+
+    }
+
+    Mat3(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3){
+        x.x = x1;
+        y.x = x2;
+        z.x = x3;
+
+        x.y = y1;
+        y.y = y2;
+        z.y = y3;
+
+        x.z = z1;
+        y.z = z2;
+        z.z = z3;
+    }
+
+    Mat3 Add(Mat3 mat){
+        return Mat3(
+        x.x + mat.x.x, x.y + mat.x.y, x.z + mat.x.z,
+        y.x + mat.y.x, y.y + mat.y.y, y.z + mat.y.z,
+        z.x + mat.z.x, z.y + mat.z.y, z.z + mat.z.z
+        );
+    }
+    Mat3 Add(float scalar){
+        return Mat3(
+        x.x + scalar, x.y + scalar, x.z + scalar,
+        y.x + scalar, y.y + scalar, y.z + scalar,
+        z.x + scalar, z.y + scalar, z.z + scalar
+        );
+    }
+
+
+    Mat3 Subtract(Mat3 mat){
+        return Mat3(
+     x.x - mat.x.x, x.y - mat.x.y, x.z - mat.x.z,
+        y.x - mat.y.x, y.y - mat.y.y, y.z - mat.y.z,
+        z.x - mat.z.x, z.y - mat.z.y, z.z - mat.z.z
+        );
+    }
+    Mat3 Subtract(float scalar){
+        return Mat3(
+        x.x - scalar, x.y - scalar, x.z - scalar,
+        y.x - scalar, y.y - scalar, y.z - scalar,
+        z.x - scalar, z.y - scalar, z.z - scalar
+        );
+    }
+
+
+    Mat3 Multiply(Mat3 mat){
+        return Mat3(
+        (x.x * mat.x.x) + (x.y * mat.y.x) + (x.z * mat.z.x), (x.x * mat.x.y) + (x.y * mat.y.y) + (x.z * mat.z.y), (x.x * mat.x.z) + (x.y * mat.y.z) + (x.z * mat.z.z),
+        (y.x * mat.x.x) + (y.y * mat.y.x) + (y.z * mat.z.x), (y.x * mat.x.y) + (y.y * mat.y.y) + (y.z * mat.z.y), (y.x * mat.x.z) + (y.y * mat.y.z) + (y.z * mat.z.z),
+        (z.x * mat.x.x) + (z.y * mat.y.x) + (z.z * mat.z.x), (z.x * mat.x.y) + (z.y * mat.y.y) + (z.z * mat.z.y), (z.x * mat.x.z) + (z.y * mat.y.z) + (z.z * mat.z.z)
+        );
+    }
+    Mat3 Multiply(float scalar){
+        return Mat3(
+        x.x * scalar, x.y * scalar, x.z * scalar,
+        y.x * scalar, y.y * scalar, y.z * scalar,
+        z.x * scalar, z.y * scalar, z.z * scalar
+        );
+    }
+    Vec3 Multiply(Vec3 vec){
+        return Vec3(
+        (x.x * vec.x) + (x.y * vec.y) + (x.y * vec.z),
+        (y.x * vec.x) + (y.y * vec.y) + (y.y * vec.z),
+        (z.x * vec.x) + (z.y * vec.y) + (z.y * vec.z)
+        );
+   }
+
+   
+    // I ain't writting matrix division for Mat3, hell no
+
+    // Mat3 Divide(Mat3 mat){
+    //
+    // }
+
+    Mat3 Divide(float scalar){
+        return Mat3(
+        x.x / scalar, x.y / scalar, x.z / scalar,
+        y.x / scalar, y.y / scalar, y.z / scalar,
+        z.x / scalar, z.y / scalar, z.z / scalar
+        );
+    }
+
+
+    bool Equals(Mat3 mat){
+        return (
+            (x.x == mat.x.x) && (x.y == mat.x.y) && (x.z == mat.x.z) && 
+            (y.x == mat.y.x) && (y.y == mat.y.y) && (y.z == mat.y.z) &&
+            (z.x == mat.z.x) && (z.y == mat.z.y) && (z.z == mat.z.z)
+        );
+    }
+
+
+    template<typename type>
+    Mat3 operator+(type v){
+        return Add(v);
+    }
+    template<typename type>
+    Mat3 operator-(type v){
+        return Subtract(v);
+    }
+    template<typename type>
+    Mat3 operator*(type v){
+        return Multiply(v);
+    }
+    template<typename type>
+    Mat3 operator/(type v){
+        return Divide(v);
+    }
+
+
+    template<typename type>
+    void operator+=(type v){
+        *this = Add(v);
+    }
+    template<typename type>
+    void operator-=(type v){
+        *this = Subtract(v);
+    }
+    template<typename type>
+    void operator*=(type v){
+        *this = Multiply(v);
+    }
+    template<typename type>
+    void operator/=(type v){
+        *this = Divide(v);
+    }
+
+
+    bool operator==(Mat3 mat){
+        return Equals(mat);
+    }
+    bool operator!=(Mat3 mat){
+        return !Equals(mat);
+    }
+};

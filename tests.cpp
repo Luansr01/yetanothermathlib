@@ -66,6 +66,20 @@ void compareMat2(Mat2* expect, Mat2* result){
 				"[" << result->y.x << ", " << result->y.y << "]" << "\n\n";
 }
 
+void compareMat3(Mat3* expect, Mat3* result){
+	std::cout <<
+				"Expected Result:\n" << 
+				"[" << expect->x.x << ", " << expect->x.y << expect->x.z << "]" << "\n" <<
+				"[" << expect->y.x << ", " << expect->y.y << expect->y.z << "]" << "\n" <<
+				"[" << expect->z.x << ", " << expect->z.y << expect->z.z << "]" << "\n\n";
+
+	std::cout << 
+				"Result:\n" <<
+				"[" << result->x.x << ", " << result->x.y << result->x.z << "]" << "\n" <<
+				"[" << result->y.x << ", " << result->y.y << result->y.z << "]" << "\n" <<
+				"[" << result->z.x << ", " << result->z.y << result->z.z << "]" << "\n\n";
+}
+
 int main(){
 	std::cout << std::setprecision(8) << std::fixed;
 	
@@ -82,6 +96,26 @@ int main(){
 
 	Mat2 test_mat2_result(3,-2,4,-3);
 	test_mat2_result /= Mat2(6,-10,1,-2);
+
+	Mat3 test_mat3_expect(
+	15, 27, 4,
+	6, 7, 1,
+	26, 63, 9
+	);
+
+	Mat3 test_mat3_result(
+	1,2,1,
+	0,1,0,
+	2,3,4
+	);
+
+	test_mat3_result *= Mat3(
+	2,5,1,
+	6,7,1,
+	1,8,1
+	);
+
+	compareMat3(&test_mat3_expect, &test_mat3_result);
 
 	compareMat2(&test_mat2_expect, &test_mat2_result);
 
