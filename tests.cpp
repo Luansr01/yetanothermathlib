@@ -69,15 +69,15 @@ void compareMat2(Mat2* expect, Mat2* result){
 void compareMat3(Mat3* expect, Mat3* result){
 	std::cout <<
 				"Expected Result:\n" << 
-				"[" << expect->x.x << ", " << expect->x.y << expect->x.z << "]" << "\n" <<
-				"[" << expect->y.x << ", " << expect->y.y << expect->y.z << "]" << "\n" <<
-				"[" << expect->z.x << ", " << expect->z.y << expect->z.z << "]" << "\n\n";
+				"[" << expect->x.x << ", " << expect->x.y << ", " << expect->x.z << "]" << "\n" <<
+				"[" << expect->y.x << ", " << expect->y.y << ", " << expect->y.z << "]" << "\n" <<
+				"[" << expect->z.x << ", " << expect->z.y << ", " << expect->z.z << "]" << "\n\n";
 
 	std::cout << 
 				"Result:\n" <<
-				"[" << result->x.x << ", " << result->x.y << result->x.z << "]" << "\n" <<
-				"[" << result->y.x << ", " << result->y.y << result->y.z << "]" << "\n" <<
-				"[" << result->z.x << ", " << result->z.y << result->z.z << "]" << "\n\n";
+				"[" << result->x.x << ", " << result->x.y << ", " << result->x.z << "]" << "\n" <<
+				"[" << result->y.x << ", " << result->y.y << ", " << result->y.z << "]" << "\n" <<
+				"[" << result->z.x << ", " << result->z.y << ", " << result->z.z << "]" << "\n\n";
 }
 
 int main(){
@@ -86,11 +86,23 @@ int main(){
 	Angle x(1);
 	Angle y(1, DEGREES);
 
+	Mat3 complexRotMat(x, x, x);
+	Mat3 complexRotMat_expect(
+	0.2919266, -0.4546487,  0.8414710,
+   	0.8372224, -0.3038967, -0.4546487,
+   	0.4624257,  0.8372224,  0.2919266 
+	);
+
+	compareMat3(&complexRotMat_expect, &complexRotMat);
+
+
 	Vec2 test_vec2_result = Vec2(1.0, 2.0) + Vec2(2.0, 2.0);
 	Vec2 test_vec2_expect(3.0, 4.0);
 
+
 	Vec3 test_vec3_result = Vec3(1.0, 2.0, 3.0) + Vec3(2.0, 5.0, 1.5);
 	Vec3 test_vec3_expect = Vec3(3.0, 7.0, 4.5);
+
 
 	Mat2 test_mat2_expect = Mat2(2, -9, 2.5, -11);
 
@@ -102,6 +114,7 @@ int main(){
 	6, 7, 1,
 	26, 63, 9
 	);
+	
 
 	Mat3 test_mat3_result(
 	1,2,1,
@@ -115,6 +128,12 @@ int main(){
 	1,8,1
 	);
 
+
+	std::cout << "test_vec2_expect[1] is " <<  test_vec2_expect[1] << "\n";
+	std::cout << "test_vec3_expect[2] is " << test_vec3_expect[2] << "\n";
+	std::cout << "test_mat2_expect[0][1] is " << test_mat2_expect[0][1] << "\n";
+	std::cout << "test_mat3_expect[2][2] is " << test_mat3_expect[2][2] << "\n\n";
+
 	compareMat3(&test_mat3_expect, &test_mat3_result);
 
 	compareMat2(&test_mat2_expect, &test_mat2_result);
@@ -124,4 +143,6 @@ int main(){
 
 	compareFloat(x.Degrees(), 57.2958);
 	compareFloat(y.Radians(), 0.0174533);
+
+
 }

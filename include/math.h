@@ -43,6 +43,9 @@ class Vec2{
 public:
     float x;
     float y;
+private: 
+    float* arr[2] = {&x, &y};
+public:
 
     Vec2(){
         x = 0;
@@ -91,7 +94,7 @@ public:
     }
 
 
-    // Operator Overloading
+    // Operator Overloadings
     template<typename type>
     Vec2 operator+(type v) const {
         return Add(v);
@@ -145,15 +148,13 @@ public:
         *this = Subtract(1);
     }
 
-    void Rotate(Angle theta){
-        float cosTheta = std::cos(theta.Radians());
-        float sinTheta = std::sin(theta.Radians());
-
-        float nX = (x * cosTheta) - (y * sinTheta);
-        float nY = (x * sinTheta) + (y * cosTheta);
-
-        x = nX;
-        y = nY;
+    // ([]) Operator Overloading (Returns an lvalue reference to the specified index)
+    float& operator[](int index){
+        if(index >= 0 && index <= 1){
+            return *(arr[index]);
+        }else{
+            throw std::out_of_range("Index out of Bounds.");
+        }
     }
 };
 
@@ -163,7 +164,9 @@ public:
     float x;
     float y;
     float z;
-
+private:
+    float* arr[3] = {&x,&y,&z};
+public:
     Vec3(){
         x = 0;
         y = 0;
@@ -212,7 +215,7 @@ public:
         return x == v.x && y == v.y && z == v.z;
     }
 
-    // Operator Overloading
+    // Operator Overloadings
     template<typename type>
     Vec3 operator+(type v) const {
         return Add(v);
@@ -265,12 +268,26 @@ public:
     void operator--(){
         *this = Subtract(1);
     }
+
+    // ([]) Operator Overloading (Returns an lvalue reference to the specified index)
+    float& operator[](int index){
+        if(index >= 0 && index <= 2){
+            return *(arr[index]);
+        }else{
+            throw std::out_of_range("Index out of Bounds.");
+        }
+    }
 };
 
+
+// Mat2 Definition
 class Mat2{
 public:
     Vec2 x;
     Vec2 y;
+private:
+    Vec2* arr[2] = {&x, &y};
+public:
 
     Mat2(){
 
@@ -282,6 +299,16 @@ public:
 
         x.y = y1;
         y.y = y2;
+    }
+
+    Mat2(Angle theta){
+        float cosTheta = std::cos(theta.Radians());
+        float sinTheta = std::sin(theta.Radians());
+
+        *this = Mat2(
+        cosTheta, -sinTheta,
+        sinTheta, cosTheta
+        );
     }
 
     Mat2 Add(Mat2 mat){
@@ -411,14 +438,26 @@ public:
     bool operator!=(Mat2 mat){
         return !Equals(mat);
     }
+
+    // ([]) Operator Overloading (Returns an lvalue reference to the specified index)
+    Vec2& operator[](int index){
+        if(index >= 0 && index <= 1){
+            return *(arr[index]);
+        }else{
+            throw std::out_of_range("Index out of Bounds.");
+        }
+    }
 };
 
+// Mat3 Definition
 class Mat3{
 public:
     Vec3 x;
     Vec3 y;
     Vec3 z;
-
+private:
+    Vec3* arr[3] = {&x,&y,&z};
+public:
     Mat3(){
 
     }
@@ -491,7 +530,7 @@ public:
         );
    }
 
-   
+
     // I ain't writting matrix division for Mat3, hell no
 
     // Mat3 Divide(Mat3 mat){
@@ -558,4 +597,92 @@ public:
     bool operator!=(Mat3 mat){
         return !Equals(mat);
     }
+
+    // ([]) Operator Overloading (Returns an lvalue reference to the specified index)
+    Vec3& operator[](int index){
+        if(index >= 0 && index <= 2){
+            return *(arr[index]);
+        }else{
+            throw std::out_of_range("Index out of Bounds.");
+        }
+    }
+
+    Mat3(Angle x, Angle y, Angle z){
+        Mat3 xRotMat(
+        1, 0, 0,
+        0, std::cos(x.Radians()), -std::sin(x.Radians()),
+        0, std::sin(x.Radians()), std::cos(x.Radians())
+        );
+
+        Mat3 yRotMat(
+        std::cos(y.Radians()), 0, std::sin(y.Radians()),
+        0, 1, 0,
+        -std::sin(y.Radians()), 0, std::cos(y.Radians())
+        );
+
+        Mat3 zRotMat(
+        std::cos(z.Radians()), -std::sin(z.Radians()), 0,
+        std::sin(z.Radians()), std::cos(z.Radians()), 0,
+        0, 0, 1
+        );
+
+        *this = xRotMat * yRotMat * zRotMat;
+    }
 };
+
+
+
+void Rotate(Vec2* vec, Angle theta){
+    float cosTheta = std::cos(theta.Radians());
+    float sinTheta = std::sin(theta.Radians());
+
+    Mat2 RotMat(
+    cosTheta, -sinTheta,
+    sinTheta, cosTheta
+    );
+
+    *vec = RotMat.Multiply(*vec);
+}
+
+void Rotate(Vec3* vec, Mat3 mat){
+    *vec = mat.Multiply(*vec);
+}
+
+void RotateX(Vec3* vec, Angle theta){
+    float cosTheta = std::cos(theta.Radians());
+    float sinTheta = std::sin(theta.Radians());
+
+    Mat3 RotMat(
+    1, 0, 0,
+    0, cosTheta, -sinTheta,
+    0, sinTheta, cosTheta
+    );
+
+    *vec = RotMat.Multiply(*vec);
+}
+
+void RotateY(Vec3* vec, Angle theta){
+    float cosTheta = std::cos(theta.Radians());
+    float sinTheta = std::sin(theta.Radians());
+
+    Mat3 RotMat(
+    cosTheta, 0, sinTheta,
+    0, 1, 0,
+    -sinTheta, 0, cosTheta
+    );
+
+    *vec = RotMat.Multiply(*vec);
+}
+
+void RotateZ(Vec3* vec, Angle theta){
+    float cosTheta = std::cos(theta.Radians());
+    float sinTheta = std::sin(theta.Radians());
+
+    Mat3 RotMat(
+    cosTheta, -sinTheta, 0,
+    sinTheta, cosTheta, 0,
+    0, 0, 1
+    );
+
+    *vec = RotMat.Multiply(*vec);
+}
