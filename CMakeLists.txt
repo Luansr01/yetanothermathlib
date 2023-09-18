@@ -7,7 +7,6 @@ add_executable("mathlib" "tests.cpp")
 
 target_include_directories("mathlib" PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include}")
 
-set(CXXFLAGS  "-lglfw -lGL -lm -lX11 -lpthread -lXi -lXrandr -ldl")
 set(CMAKE_CXX_FLAGS "${CXXFLAGS}")
 
 
